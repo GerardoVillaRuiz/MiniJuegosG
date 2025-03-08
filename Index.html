@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juegos 2D</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: url('https://source.unsplash.com/1920x1080/?abstract') no-repeat center center/cover;
+            color: white;
+            overflow: hidden;
+            height: 100vh;
+        }
+        .contenedor {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin: auto;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .botones {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        button {
+            margin: 5px;
+            padding: 10px;
+            border: none;
+            background: #ff9800;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            width: 45%;
+        }
+        button:hover {
+            background: #e68900;
+        }
+        #juego {
+            margin-top: 20px;
+            min-height: 200px;
+        }
+        canvas {
+            background: white;
+            display: block;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="contenedor">
+        <h1>Juegos 2D</h1>
+        <div class="botones">
+            <button onclick="mostrarJuego('piedraPapelTijera')">Piedra, Papel o Tijera</button>
+            <button onclick="mostrarJuego('tetris')">Tetris</button>
+            <button onclick="mostrarJuego('gato')">Gato</button>
+            <button onclick="mostrarJuego('adivinaNumero')">Adivina el Número</button>
+            <button onclick="mostrarJuego('letrasNumeros')">Letras y Números</button>
+        </div>
+        <div id="juego"></div>
+    </div>
+
+    <script>
+        function mostrarJuego(juego) {
+            let contenedor = document.getElementById("juego");
+            contenedor.innerHTML = "";
+
+            if (juego === "piedraPapelTijera") {
+                contenedor.innerHTML = `
+                    <h2>Piedra, Papel o Tijera</h2>
+                    <button onclick="jugar('Piedra')">🪨 Piedra</button>
+                    <button onclick="jugar('Papel')">📜 Papel</button>
+                    <button onclick="jugar('Tijera')">✂️ Tijera</button>
+                    <p id="resultado"></p>
+                `;
+            } else if (juego === "tetris") {
+                contenedor.innerHTML = `<h2>Tetris (Aún en desarrollo)</h2>`;
+            } else if (juego === "gato") {
+                contenedor.innerHTML = `<h2>Gato (Aún en desarrollo)</h2>`;
+            } else if (juego === "adivinaNumero") {
+                contenedor.innerHTML = `
+                    <h2>Adivina el Número</h2>
+                    <p>Ingresa un número del 1 al 10:</p>
+                    <input type="number" id="numInput" min="1" max="10">
+                    <button onclick="adivinarNumero()">Adivinar</button>
+                    <p id="numResultado"></p>
+                `;
+                numeroSecreto = Math.floor(Math.random() * 10) + 1;
+            } else if (juego === "letrasNumeros") {
+                contenedor.innerHTML = `
+                    <h2>Letras y Números</h2>
+                    <button onclick="generarLetraNumero()">Generar</button>
+                    <p id="letraNumero"></p>
+                `;
+            }
+        }
+
+        function jugar(eleccion) {
+            let opciones = ["Piedra", "Papel", "Tijera"];
+            let eleccionBot = opciones[Math.floor(Math.random() * 3)];
+            let resultado = "";
+
+            if (eleccion === eleccionBot) {
+                resultado = "Empate!";
+            } else if (
+                (eleccion === "Piedra" && eleccionBot === "Tijera") ||
+                (eleccion === "Papel" && eleccionBot === "Piedra") ||
+                (eleccion === "Tijera" && eleccionBot === "Papel")
+            ) {
+                resultado = "¡Ganaste!";
+            } else {
+                resultado = "Perdiste :(";
+            }
+
+            document.getElementById("resultado").innerText = `Tú: ${eleccion} - Bot: ${eleccionBot} → ${resultado}`;
+        }
+
+        let numeroSecreto;
+        function adivinarNumero() {
+            let num = parseInt(document.getElementById("numInput").value);
+            let resultado = num === numeroSecreto ? "¡Correcto!" : "Incorrecto, intenta de nuevo";
+            document.getElementById("numResultado").innerText = resultado;
+        }
+
+        function generarLetraNumero() {
+            let letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            let numeros = "0123456789";
+            let letra = letras[Math.floor(Math.random() * letras.length)];
+            let numero = numeros[Math.floor(Math.random() * numeros.length)];
+            document.getElementById("letraNumero").innerText = `Letra: ${letra} - Número: ${numero}`;
+        }
+    </script>
+
+</body>
+</html>
